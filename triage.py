@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ci-triage orchestrator — the dogfood pipeline. (v0.1, 2026-10-08)
+"""ci-triage orchestrator — the dogfood pipeline. (v0.2, 2026-10-08)
 
 For each configured repo: opportunistically record PASSES of recent runs, find NEW failed
 runs (not in hist), fetch failed-job logs, render each failed job's verdict via a cheap
@@ -36,6 +36,8 @@ Rules:
 - infra = network/DNS timeout, OOM-killed, disk full, npm/apt 5xx, runner/sandbox/permission -> rerun (even first occurrence).
 - regression = deterministic assertion/compile/type/lint error with a file pointer -> fix.
 - config = tool/config drift (new dependency version, changed config file) -> fix.
+- FIRST occurrence (history shows no prior failure for this job/step): never "fix" — use "unknown"/"rerun". A novel error is not yet a proven regression (v0.2).
+- Your "evidence" must be an EXACT verbatim line from the LOG EXCERPT (it is machine-checked against the full log). "test" must appear verbatim in the log, or be null (v0.2).
 - confidence < 0.6 -> classification "unknown", action "rerun".
 
 REPO: {repo}   JOB: {job}   FAILED STEP: {step}
@@ -90,10 +92,12 @@ def fetch_log(repo, run_id, job_id, token):
     return txt.replace("\r\n", "\n").replace("\r", "\n")  # skeptic 6b: normalize
 
 def first_failing_step(job):
-    for s in reversed(job.get("steps", [])):
-        if s.get("conclusion") == "failure":
-            return s["name"]
-    return None
+    """v0.2 (GLM review #8): FIRST failing step in EXECUTION ORDER is the bug. Post/cleanup
+    steps ('Post actions/cache', 'Setup Job') run after the real failure and fail on their own —
+    the v0.1 reversed() order triaged the cleanup, not the bug."""
+    fsteps = [s["name"] for s in job.get("steps", []) if s.get("conclusion") == "failure"]
+    real = [n for n in fsteps if not n.startswith(("Post ", "Setup Job"))]
+    return (real or fsteps or [None])[0]
 
 def excerpt(text, cap=15000):
     lines = text.splitlines()
@@ -118,12 +122,27 @@ def load_hist():
     except FileNotFoundError:
         return []
 
+def _hist_write(entries):
+    """flock'd append (GLM #13: overlapping invocations double-appended streaks)."""
+    import fcntl
+    with open(HIST, "a") as fh:
+        fcntl.flock(fh, fcntl.LOCK_EX)
+        for e in entries:
+            fh.write(json.dumps(e) + "\n")
+        fcntl.flock(fh, fcntl.LOCK_UN)
+
+def _norm(s):
+    """Normalize for rule-2 identity (GLM #3b): durations/ports/timestamps change between runs,
+    so byte-identity never matched for common flake shapes. digits -> N, whitespace collapsed."""
+    return re.sub(r"\s+", " ", re.sub(r"\d+", "N", str(s or ""))).strip()[:200]
+
 def hist_context(hist, repo, job, step, limit=6):
     """pass-aware: entries for (repo, job) with step match OR step=None (pass rows)."""
     rows = [e for e in hist if e.get("repo") == repo and e.get("job") == job
             and (step is None or e.get("step") in (None, step))][-limit:]
     slim = [{"ts": e.get("ts"), "result": e.get("result", "fail"),
              "classification": e.get("classification"), "evidence_line": e.get("evidence_line"),
+             "evidence_norm": e.get("evidence_norm") or _norm(e.get("evidence_line")),
              "consecutive_failures": e.get("consecutive_failures")} for e in rows]
     return slim or "(none — first recorded failure)"
 
@@ -151,22 +170,26 @@ def record_recent_passes(repo, token, hist, seen_runs):
     runs = api(f"https://api.github.com/repos/{repo}/actions/runs?per_page=8", token).get("workflow_runs", [])
     for run in runs:
         rid = run["id"]
-        if rid in seen_runs:
-            continue
         if run.get("conclusion") != "success":
             continue
+        # v0.2 (GLM #2a): record the pass even when a FAIL row for this run_id already exists —
+        # a re-run pass after a recorded failure (same run_id, attempt++) is exactly the
+        # fail→pass→fail flaky signal v0.1 was structurally blind to.
         jobs = api(f"https://api.github.com/repos/{repo}/actions/runs/{rid}/jobs", token).get("jobs", [])
+        new_passes = []
         for j in jobs:
-            if j.get("conclusion") == "success":
-                if any(e.get("run_id") == rid and e.get("job") == j["name"] for e in hist):
-                    continue
-                entry = {"ts": time.strftime("%Y-%m-%dT%H:%M:%S+00:00"), "repo": repo, "run_id": rid,
-                         "job": j["name"], "step": None, "result": "pass", "test": None,
-                         "classification": None, "evidence_line": None, "consecutive_failures": 0}
-                hist.append(entry)
-                with open(HIST, "a") as fh:
-                    fh.write(json.dumps(entry) + "\n")
-                print(f"  history: {repo} / {j['name']} PASS run {rid}")
+            if j.get("conclusion") != "success":
+                continue
+            if any(e.get("run_id") == rid and e.get("result") == "pass" for e in hist):
+                continue  # pass rows dedupe per (run_id, job)
+            new_passes.append({"ts": time.strftime("%Y-%m-%dT%H:%M:%S+00:00"), "repo": repo, "run_id": rid,
+                               "job": j["name"], "step": None, "result": "pass", "test": None,
+                               "classification": None, "evidence_line": None, "consecutive_failures": 0})
+        if new_passes:
+            _hist_write(new_passes)
+            hist.extend(new_passes)
+            for e in new_passes:
+                print(f"  history: {repo} / {e['job']} PASS run {rid}")
 
 def main():
     ap = argparse.ArgumentParser()
@@ -216,9 +239,28 @@ def main():
             log_path = f"{OUT}/{repo.replace('/', '_')}-{rid}-{j['id']}.log"
             open(log_path, "w", encoding="utf-8").write(text)
             v = llm_verdict(endpoint, key, model, repo, j["name"], step, ctx, excerpt(text))
+            # v0.2 grounding (GLM #18): evidence must be a verbatim log line (kills fabricated
+            # quotes AND prompt injection via log content); test name must appear in the log.
+            ev0 = str(v.get("evidence") or "")
+            if not ((ev0 and ev0 in text) and ((not v.get("test")) or (v["test"] in text))):
+                v = {**v, "classification": "unknown", "action": "rerun",
+                     "confidence": min(float(v.get("confidence") or 0), 0.59),
+                     "evidence": ev0 + " [v0.2: not a verbatim log line — downgraded]"}
+                print(f"    grounding: downgraded to unknown/rerun")
+            # v0.2 (GLM #1): nothing NOVEL is 'fix' — first occurrence has no prior evidence to
+            # compare against, so the DIFFERENT-branch was vacuously true and 'fix' was the default.
+            prior = [e for e in hist if e.get("repo") == repo and e.get("job") == j["name"]
+                     and e.get("step") == step and e.get("result", "fail") == "fail"
+                     and e.get("evidence_line")]
+            if v["action"] == "fix" and not prior:
+                v = {**v, "classification": "unknown", "action": "rerun",
+                     "evidence": str(v.get("evidence") or "") + " [v0.2: first occurrence]"}
+                print(f"    first-occurrence: downgraded to unknown/rerun")
             entry = {"ts": time.strftime("%Y-%m-%dT%H:%M:%S+00:00"), "repo": repo, "run_id": rid,
                      "job": j["name"], "step": step, "result": "fail", "test": v.get("test"),
                      "classification": v["classification"], "evidence_line": v.get("evidence"),
+                     "evidence_norm": _norm(v.get("evidence")),
+                     "contract": "v0.2",
                      "consecutive_failures": streak + 1}
             new_entries.append(entry)
             print(f"  [{j['name']}] {v['classification']}/{v['action']} conf={v['confidence']} :: {str(v.get('evidence'))[:100]}")
@@ -231,18 +273,24 @@ def main():
                 comment_lines.append(f"- **{j['name']}** ({step}): {v['classification']} → {v['action']} — `{ev}`")
             results.append({"repo": repo, "run": rid, "job": j["name"], "step": step, "verdict": v, "log": log_path})
         if new_entries:
-            with open(HIST, "a") as fh:
-                for e in new_entries:
-                    fh.write(json.dumps(e) + "\n")
+            _hist_write(new_entries)
             hist.extend(new_entries)
             seen_runs.add(rid)
         if comment_lines:
             if a.dry:
                 print(f"  [dry] would comment {len(comment_lines)} line(s)")
             else:
-                body = {"body": "ci-triage verdict:\n" + "\n".join(comment_lines[:3]) + "\n\n_— ci-triage (a Pennyforge tool)_"}
-                api(f"https://api.github.com/repos/{repo}/actions/runs/{rid}/comments", token, body)
-                print(f"  comment posted ({len(comment_lines)} line(s))")
+                # v0.2 (GLM #14): if a newer run on the same branch already succeeded, the verdict
+                # is stale (the repo moved past this failure) — suppress instead of necro-commenting.
+                br = run.get("head_branch", "")
+                newest = api(f"https://api.github.com/repos/{repo}/actions/runs?per_page=1&branch={urllib.parse.quote(br)}", token).get("workflow_runs", [])
+                if newest and newest[0]["id"] != rid and newest[0].get("conclusion") == "success":
+                    print(f"  [suppressed] newer run {newest[0]['id']} on {br} already succeeded")
+                    comment_lines = []
+        if comment_lines:
+            body = {"body": "ci-triage verdict:\n" + "\n".join(comment_lines[:3]) + "\n\n_— ci-triage (a Pennyforge tool)_"}
+            api(f"https://api.github.com/repos/{repo}/actions/runs/{rid}/comments", token, body)
+            print(f"  comment posted ({len(comment_lines)} line(s))")
     with open(f"{OUT}/verdicts.json", "a") as fh:
         fh.write(json.dumps(results, indent=1) + "\n")
     print(f"done: {len(results)} job verdict(s)")
