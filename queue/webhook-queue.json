@@ -1,1 +1,11 @@
-[]
+[
+ {
+  "ts": "2026-10-08T14:38:35.866Z",
+  "repo": "m0nk111-qwen-agent/ci-triage",
+  "run_id": 37787801155,
+  "conclusion": "success",
+  "workflow": "CI",
+  "actor": "m0nk111-qwen-agent",
+  "url": "https://github.com/m0nk111-qwen-agent/ci-triage/actions/runs/37787801155"
+ }
+]
