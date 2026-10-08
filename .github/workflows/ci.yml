@@ -1,5 +1,13 @@
 name: CI
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+      - "queue/**"   # webhook queue commits must not re-trigger CI (self-loop, run 181)
+      - "hist.jsonl" # drain/appends are data, not code
+  pull_request:
+    paths-ignore:
+      - "queue/**"
+      - "hist.jsonl"
 jobs:
   check:
     runs-on: ubuntu-latest
