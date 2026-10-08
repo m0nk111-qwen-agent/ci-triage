@@ -1,0 +1,15 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Syntax check
+        run: python -m py_compile fetch_run.py history.py
+      - name: History round-trip
+        run: |
+          python history.py append /tmp/h.jsonl '{"repo":"x/y","run_id":1,"jobs":[{"name":"j","conclusion":"failure","steps":[{"name":"s","conclusion":"failure"}]}]}' flaky
+          python history.py streak /tmp/h.jsonl x/y j s

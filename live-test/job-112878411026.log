@@ -1,0 +1,274 @@
+2026-10-07T15:45:02.8677167Z Current runner version: '2.337.0'
+2026-10-07T15:45:02.8701002Z ##[group]Runner Image Provisioner
+2026-10-07T15:45:02.8701936Z Hosted Compute Agent
+2026-10-07T15:45:02.8702471Z Version: 20261002.596
+2026-10-07T15:45:02.8703064Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-07T15:45:02.8703749Z Build Date: 2026-10-02T22:28:27Z
+2026-10-07T15:45:02.8704524Z Worker ID: {fdd16ce0-ae41-431c-a63c-3b80f4bc4556}
+2026-10-07T15:45:02.8705228Z Region: westus3
+2026-10-07T15:45:02.8705728Z Cloud: Azure
+2026-10-07T15:45:02.8706217Z ##[endgroup]
+2026-10-07T15:45:02.8707589Z ##[group]Operating System
+2026-10-07T15:45:02.8708225Z Ubuntu
+2026-10-07T15:45:02.8708820Z 24.04.5
+2026-10-07T15:45:02.8709295Z LTS
+2026-10-07T15:45:02.8709752Z ##[endgroup]
+2026-10-07T15:45:02.8710279Z ##[group]Runner Image
+2026-10-07T15:45:02.8710827Z Image: ubuntu-24.04
+2026-10-07T15:45:02.8711363Z Version: 20261004.327.1
+2026-10-07T15:45:02.8712525Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-07T15:45:02.8713906Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-07T15:45:02.8715168Z ##[endgroup]
+2026-10-07T15:45:02.8716273Z ##[group]GITHUB_TOKEN Permissions
+2026-10-07T15:45:02.8718158Z Contents: read
+2026-10-07T15:45:02.8718744Z Metadata: read
+2026-10-07T15:45:02.8719270Z ##[endgroup]
+2026-10-07T15:45:02.8721732Z Secret source: None
+2026-10-07T15:45:02.8722666Z Cache mode: write
+2026-10-07T15:45:02.8723300Z Prepare workflow directory
+2026-10-07T15:45:02.9063722Z Prepare all required actions
+2026-10-07T15:45:02.9135417Z Getting action download info
+2026-10-07T15:45:03.2893728Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-07T15:45:03.3747452Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-10-07T15:45:03.5268915Z Complete job name: [Required] Check correct format
+2026-10-07T15:45:03.6142205Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-07T15:45:03.6143168Z with:
+2026-10-07T15:45:03.6143573Z   fetch-depth: 2
+2026-10-07T15:45:03.6143980Z   submodules: true
+2026-10-07T15:45:03.6144664Z   repository: ChromeDevTools/chrome-devtools-mcp
+2026-10-07T15:45:03.6148235Z   token: ***
+2026-10-07T15:45:03.6148632Z   ssh-strict: true
+2026-10-07T15:45:03.6149037Z   ssh-user: git
+2026-10-07T15:45:03.6149449Z   persist-credentials: true
+2026-10-07T15:45:03.6149892Z   clean: true
+2026-10-07T15:45:03.6150303Z   sparse-checkout-cone-mode: true
+2026-10-07T15:45:03.6150777Z   fetch-tags: false
+2026-10-07T15:45:03.6151183Z   show-progress: true
+2026-10-07T15:45:03.6151582Z   lfs: false
+2026-10-07T15:45:03.6151960Z   set-safe-directory: true
+2026-10-07T15:45:03.6152424Z   allow-unsafe-pr-checkout: false
+2026-10-07T15:45:03.6153175Z ##[endgroup]
+2026-10-07T15:45:03.7107973Z Syncing repository: ChromeDevTools/chrome-devtools-mcp
+2026-10-07T15:45:03.7109985Z ##[group]Getting Git version info
+2026-10-07T15:45:03.7110743Z Working directory is '/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp'
+2026-10-07T15:45:03.7111873Z [command]/usr/bin/git version
+2026-10-07T15:45:03.7167943Z git version 2.55.0
+2026-10-07T15:45:03.7186808Z ##[endgroup]
+2026-10-07T15:45:03.7196585Z Temporarily overriding HOME='/home/runner/work/_temp/6db835f1-7d42-4261-b066-c064d4a788e1' before making global git config changes
+2026-10-07T15:45:03.7197840Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T15:45:03.7202390Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp
+2026-10-07T15:45:03.7243980Z Deleting the contents of '/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp'
+2026-10-07T15:45:03.7247589Z ##[group]Determining repository object format
+2026-10-07T15:45:03.7248918Z ##[endgroup]
+2026-10-07T15:45:03.7249595Z ##[group]Initializing the repository
+2026-10-07T15:45:03.7252838Z [command]/usr/bin/git init /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp
+2026-10-07T15:45:03.7335628Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-07T15:45:03.7337350Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-07T15:45:03.7338835Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-07T15:45:03.7339524Z hint: call:
+2026-10-07T15:45:03.7339886Z hint:
+2026-10-07T15:45:03.7340368Z hint: 	git config --global init.defaultBranch <name>
+2026-10-07T15:45:03.7340911Z hint:
+2026-10-07T15:45:03.7341425Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-07T15:45:03.7342257Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-07T15:45:03.7343109Z hint:
+2026-10-07T15:45:03.7343681Z hint: 	git branch -m <name>
+2026-10-07T15:45:03.7344112Z hint:
+2026-10-07T15:45:03.7344902Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-07T15:45:03.7345959Z Initialized empty Git repository in /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/
+2026-10-07T15:45:03.7348507Z [command]/usr/bin/git remote add origin https://github.com/ChromeDevTools/chrome-devtools-mcp
+2026-10-07T15:45:03.7420787Z ##[endgroup]
+2026-10-07T15:45:03.7421538Z ##[group]Disabling automatic garbage collection
+2026-10-07T15:45:03.7423794Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-07T15:45:03.7450849Z ##[endgroup]
+2026-10-07T15:45:03.7452027Z ##[group]Setting up auth
+2026-10-07T15:45:03.7452855Z Removing SSH command configuration
+2026-10-07T15:45:03.7456832Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T15:45:03.7482609Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T15:45:03.7755262Z Removing HTTP extra header
+2026-10-07T15:45:03.7760550Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T15:45:03.7785098Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T15:45:03.7952385Z Removing includeIf entries pointing to credentials config files
+2026-10-07T15:45:03.7958566Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T15:45:03.7995568Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T15:45:03.8169106Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-07T15:45:03.8199447Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git.path /home/runner/work/_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:45:03.8223345Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:45:03.8249155Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:45:03.8273006Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:45:03.8292773Z ##[endgroup]
+2026-10-07T15:45:03.8293447Z ##[group]Fetching the repository
+2026-10-07T15:45:03.8300089Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=2 origin +204120a9a6f409a0da60d0554a55fed0c7ba2183:refs/remotes/pull/3025/merge
+2026-10-07T15:45:05.1754450Z From https://github.com/ChromeDevTools/chrome-devtools-mcp
+2026-10-07T15:45:05.1756688Z  * [new ref]         204120a9a6f409a0da60d0554a55fed0c7ba2183 -> pull/3025/merge
+2026-10-07T15:45:05.1768322Z ##[endgroup]
+2026-10-07T15:45:05.1769753Z ##[group]Determining the checkout info
+2026-10-07T15:45:05.1771385Z ##[endgroup]
+2026-10-07T15:45:05.1772316Z [command]/usr/bin/git sparse-checkout disable
+2026-10-07T15:45:05.1817500Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-07T15:45:05.1843691Z ##[group]Checking out the ref
+2026-10-07T15:45:05.1846161Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/3025/merge
+2026-10-07T15:45:05.2362079Z Note: switching to 'refs/remotes/pull/3025/merge'.
+2026-10-07T15:45:05.2364534Z 
+2026-10-07T15:45:05.2366389Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-07T15:45:05.2369507Z changes and commit them, and you can discard any commits you make in this
+2026-10-07T15:45:05.2372400Z state without impacting any branches by switching back to a branch.
+2026-10-07T15:45:05.2374458Z 
+2026-10-07T15:45:05.2375683Z If you want to create a new branch to retain commits you create, you may
+2026-10-07T15:45:05.2378363Z do so (now or later) by using -c with the switch command. Example:
+2026-10-07T15:45:05.2380070Z 
+2026-10-07T15:45:05.2380791Z   git switch -c <new-branch-name>
+2026-10-07T15:45:05.2381897Z 
+2026-10-07T15:45:05.2382673Z Or undo this operation with:
+2026-10-07T15:45:05.2383941Z 
+2026-10-07T15:45:05.2384806Z   git switch -
+2026-10-07T15:45:05.2385987Z 
+2026-10-07T15:45:05.2387169Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-07T15:45:05.2388610Z 
+2026-10-07T15:45:05.2390152Z HEAD is now at 204120a Merge 3c2063ea67de7da8f84801ab81451baa2f3c5846 into 6f2b48ae5bfb04592be5151b7eb6c2054d29b0f3
+2026-10-07T15:45:05.2396658Z ##[endgroup]
+2026-10-07T15:45:05.2399024Z ##[group]Setting up auth for fetching submodules
+2026-10-07T15:45:05.2403188Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-07T15:45:05.2420243Z [command]/usr/bin/git config --global include.path /home/runner/work/_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:45:05.2450313Z [command]/usr/bin/git config --global --unset-all url.https://github.com/.insteadOf
+2026-10-07T15:45:05.2475505Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
+2026-10-07T15:45:05.2503913Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf org-11260967@github.com:
+2026-10-07T15:45:05.2533762Z ##[endgroup]
+2026-10-07T15:45:05.2537188Z ##[group]Fetching submodules
+2026-10-07T15:45:05.2538892Z [command]/usr/bin/git submodule sync
+2026-10-07T15:45:05.2720414Z [command]/usr/bin/git -c protocol.version=2 submodule update --init --force --depth=2
+2026-10-07T15:45:05.2902222Z Submodule 'devtools-frontend' (https://github.com/ChromeDevTools/devtools-frontend.git) registered for path 'third_party/devtools-frontend'
+2026-10-07T15:45:05.2922975Z Cloning into '/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/third_party/devtools-frontend'...
+2026-10-07T15:45:13.3008452Z From https://github.com/ChromeDevTools/devtools-frontend
+2026-10-07T15:45:13.3009728Z  * branch              ae714aac9f0a7c8683fa4dff5a7dcaf55c233ad4 -> FETCH_HEAD
+2026-10-07T15:45:15.7020556Z Submodule path 'third_party/devtools-frontend': checked out 'ae714aac9f0a7c8683fa4dff5a7dcaf55c233ad4'
+2026-10-07T15:45:15.7034825Z [command]/usr/bin/git submodule foreach git config --local gc.auto 0
+2026-10-07T15:45:15.7229546Z Entering 'third_party/devtools-frontend'
+2026-10-07T15:45:15.7260728Z ##[endgroup]
+2026-10-07T15:45:15.7261257Z ##[group]Persisting credentials for submodules
+2026-10-07T15:45:15.7270184Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :"
+2026-10-07T15:45:15.7446943Z Entering 'third_party/devtools-frontend'
+2026-10-07T15:45:15.7536706Z [command]/usr/bin/git submodule foreach git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T15:45:15.7702518Z Entering 'third_party/devtools-frontend'
+2026-10-07T15:45:15.7720401Z file:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend/config	remote.origin.url
+2026-10-07T15:45:15.7736644Z [command]/usr/bin/git config --file /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend/config includeIf.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend.path /home/runner/work/_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:45:15.7772794Z [command]/usr/bin/git config --file /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend/config includeIf.gitdir:/github/workspace/.git/modules/devtools-frontend.path /github/runner_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:45:15.7804943Z [command]/usr/bin/git submodule foreach git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'
+2026-10-07T15:45:15.8002193Z Entering 'third_party/devtools-frontend'
+2026-10-07T15:45:15.8029932Z [command]/usr/bin/git submodule foreach git config --local --add 'url.https://github.com/.insteadOf' 'org-11260967@github.com:'
+2026-10-07T15:45:15.8213218Z Entering 'third_party/devtools-frontend'
+2026-10-07T15:45:15.8240425Z ##[endgroup]
+2026-10-07T15:45:15.8295633Z [command]/usr/bin/git log -1 --format=%H
+2026-10-07T15:45:15.8297362Z 204120a9a6f409a0da60d0554a55fed0c7ba2183
+2026-10-07T15:45:15.8538370Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-10-07T15:45:15.8538775Z with:
+2026-10-07T15:45:15.8538989Z   cache: npm
+2026-10-07T15:45:15.8539192Z   node-version-file: .nvmrc
+2026-10-07T15:45:15.8539431Z   check-latest: false
+2026-10-07T15:45:15.8541753Z   token: ***
+2026-10-07T15:45:15.8541970Z   package-manager-cache: true
+2026-10-07T15:45:15.8542222Z ##[endgroup]
+2026-10-07T15:45:15.9730784Z Node version file is not JSON file
+2026-10-07T15:45:15.9732258Z Resolved .nvmrc as 24
+2026-10-07T15:45:15.9783457Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-07T15:45:15.9787459Z ##[group]Environment details
+2026-10-07T15:45:16.3194187Z node: v24.21.0
+2026-10-07T15:45:16.3194694Z npm: 11.19.0
+2026-10-07T15:45:16.3195004Z yarn: 1.22.22
+2026-10-07T15:45:16.3195545Z ##[endgroup]
+2026-10-07T15:45:16.3211420Z [command]/opt/hostedtoolcache/node/24.21.0/x64/bin/npm config get cache
+2026-10-07T15:45:16.4422175Z /home/runner/.npm
+2026-10-07T15:45:16.6910155Z Cache hit for: node-cache-Linux-x64-npm-f7a7452307b0f682d297afa34338eb0cfd9e92313fc494af892d1953e30218f1
+2026-10-07T15:45:17.9248745Z Received 33554432 of 64937548 (51.7%), 32.0 MBs/sec
+2026-10-07T15:45:18.2006393Z Received 64937548 of 64937548 (100.0%), 48.5 MBs/sec
+2026-10-07T15:45:18.2006872Z Cache Size: ~62 MB (64937548 B)
+2026-10-07T15:45:18.2042423Z [command]/usr/bin/tar -xf /home/runner/work/_temp/6128c757-2a33-4eda-a881-e1b279efaf5a/cache.tzst -P -C /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp --use-compress-program unzstd
+2026-10-07T15:45:18.3800855Z Cache restored successfully
+2026-10-07T15:45:18.3832219Z Cache restored from key: node-cache-Linux-x64-npm-f7a7452307b0f682d297afa34338eb0cfd9e92313fc494af892d1953e30218f1
+2026-10-07T15:45:18.3978751Z ##[group]Run npm ci
+2026-10-07T15:45:18.3979088Z [36;1mnpm ci[0m
+2026-10-07T15:45:18.4156145Z shell: /usr/bin/bash -e {0}
+2026-10-07T15:45:18.4156457Z ##[endgroup]
+2026-10-07T15:45:21.4521514Z npm warn deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-codec instead
+2026-10-07T15:45:23.2696353Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2026-10-07T15:45:31.0809471Z 
+2026-10-07T15:45:31.0810255Z > chrome-devtools-mcp@1.10.1 prepare
+2026-10-07T15:45:31.0810858Z > node scripts/prepare.ts
+2026-10-07T15:45:31.0811117Z 
+2026-10-07T15:45:31.1534046Z devtools-frontend submodule is ready.
+2026-10-07T15:45:31.1536989Z Removing conflicting global declaration from @paulirish/trace_engine...
+2026-10-07T15:45:31.1544482Z Successfully removed conflicting global declaration.
+2026-10-07T15:45:31.7141195Z 
+2026-10-07T15:45:31.7142242Z added 444 packages, and audited 445 packages in 13s
+2026-10-07T15:45:31.7142772Z 
+2026-10-07T15:45:31.7143399Z 149 packages are looking for funding
+2026-10-07T15:45:31.7143997Z   run `npm fund` for details
+2026-10-07T15:45:31.7160265Z 
+2026-10-07T15:45:31.7161017Z 1 high severity vulnerability
+2026-10-07T15:45:31.7161412Z 
+2026-10-07T15:45:31.7161642Z To address all issues, run:
+2026-10-07T15:45:31.7162048Z   npm audit fix --force
+2026-10-07T15:45:31.7162257Z 
+2026-10-07T15:45:31.7162402Z Run `npm audit` for details.
+2026-10-07T15:45:31.7620441Z ##[group]Run npm run check-format
+2026-10-07T15:45:31.7620763Z [36;1mnpm run check-format[0m
+2026-10-07T15:45:31.7659795Z shell: /usr/bin/bash -e {0}
+2026-10-07T15:45:31.7660064Z ##[endgroup]
+2026-10-07T15:45:31.8617981Z 
+2026-10-07T15:45:31.8620062Z > chrome-devtools-mcp@1.10.1 check-format
+2026-10-07T15:45:31.8620506Z > eslint --cache . && prettier --check --cache .
+2026-10-07T15:45:31.8620727Z 
+2026-10-07T15:46:15.8485078Z 
+2026-10-07T15:46:15.8486132Z /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/src/McpContext.ts
+2026-10-07T15:46:15.8511461Z ##[error]  13:1  error  All imports in the declaration are only used as types. Use `import type`  @typescript-eslint/consistent-type-imports
+2026-10-07T15:46:15.8518438Z 
+2026-10-07T15:46:15.8518970Z ✖ 1 problem (1 error, 0 warnings)
+2026-10-07T15:46:15.8519425Z   1 error and 0 warnings potentially fixable with the `--fix` option.
+2026-10-07T15:46:15.8519725Z 
+2026-10-07T15:46:16.1362993Z ##[error]Process completed with exit code 1.
+2026-10-07T15:46:16.1498829Z Post job cleanup.
+2026-10-07T15:46:16.2266276Z [command]/usr/bin/git version
+2026-10-07T15:46:16.2304816Z git version 2.55.0
+2026-10-07T15:46:16.2334840Z Temporarily overriding HOME='/home/runner/work/_temp/fbff6fe3-2d3e-4c24-a0f4-745944103284' before making global git config changes
+2026-10-07T15:46:16.2335833Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-07T15:46:16.2339497Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp
+2026-10-07T15:46:16.2363938Z Removing SSH command configuration
+2026-10-07T15:46:16.2369782Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-07T15:46:16.2399334Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-07T15:46:16.2562418Z Entering 'third_party/devtools-frontend'
+2026-10-07T15:46:16.2631611Z Removing HTTP extra header
+2026-10-07T15:46:16.2636571Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-07T15:46:16.2662350Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-07T15:46:16.2821956Z Entering 'third_party/devtools-frontend'
+2026-10-07T15:46:16.2891162Z Removing includeIf entries pointing to credentials config files
+2026-10-07T15:46:16.2897526Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T15:46:16.2920354Z includeif.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git.path
+2026-10-07T15:46:16.2921619Z includeif.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/worktrees/*.path
+2026-10-07T15:46:16.2922883Z includeif.gitdir:/github/workspace/.git.path
+2026-10-07T15:46:16.2923533Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-07T15:46:16.2929017Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git.path
+2026-10-07T15:46:16.2947335Z /home/runner/work/_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:46:16.2957336Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-51e30b20\-5001\-4012\-b8a2\-9f92b283c0ab\.config
+2026-10-07T15:46:16.2984739Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/worktrees/*.path
+2026-10-07T15:46:16.3009145Z /home/runner/work/_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:46:16.3016189Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-51e30b20\-5001\-4012\-b8a2\-9f92b283c0ab\.config
+2026-10-07T15:46:16.3041164Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-07T15:46:16.3058099Z /github/runner_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:46:16.3064768Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-51e30b20\-5001\-4012\-b8a2\-9f92b283c0ab\.config
+2026-10-07T15:46:16.3090787Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-07T15:46:16.3107148Z /github/runner_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:46:16.3113282Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-51e30b20\-5001\-4012\-b8a2\-9f92b283c0ab\.config
+2026-10-07T15:46:16.3138378Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-07T15:46:16.3297707Z Entering 'third_party/devtools-frontend'
+2026-10-07T15:46:16.3314599Z file:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend/config	remote.origin.url
+2026-10-07T15:46:16.3376149Z [command]/usr/bin/git config --file /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-07T15:46:16.3406531Z includeif.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend.path
+2026-10-07T15:46:16.3407936Z includeif.gitdir:/github/workspace/.git/modules/devtools-frontend.path
+2026-10-07T15:46:16.3413954Z [command]/usr/bin/git config --file /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend/config --get-all includeif.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend.path
+2026-10-07T15:46:16.3436049Z /home/runner/work/_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:46:16.3444943Z [command]/usr/bin/git config --file /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend/config --unset includeif.gitdir:/home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend.path \/home\/runner\/work\/_temp\/git\-credentials\-51e30b20\-5001\-4012\-b8a2\-9f92b283c0ab\.config
+2026-10-07T15:46:16.3475105Z [command]/usr/bin/git config --file /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend/config --get-all includeif.gitdir:/github/workspace/.git/modules/devtools-frontend.path
+2026-10-07T15:46:16.3493644Z /github/runner_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config
+2026-10-07T15:46:16.3502980Z [command]/usr/bin/git config --file /home/runner/work/chrome-devtools-mcp/chrome-devtools-mcp/.git/modules/devtools-frontend/config --unset includeif.gitdir:/github/workspace/.git/modules/devtools-frontend.path \/github\/runner_temp\/git\-credentials\-51e30b20\-5001\-4012\-b8a2\-9f92b283c0ab\.config
+2026-10-07T15:46:16.3560234Z Removing credentials config '/home/runner/work/_temp/git-credentials-51e30b20-5001-4012-b8a2-9f92b283c0ab.config'
+2026-10-07T15:46:16.3775861Z Cleaning up orphan processes
