@@ -12,6 +12,9 @@ Env:
                    (default: guardian http://192.168.1.35:11434/v1/chat/completions)
   TRIAGE_API_KEY   Bearer key for the endpoint
   TRIAGE_MODEL     model name (default: google/gemini-3.5-flash-lite)
+  CI_WEBHOOK_SECRET if set: drain the repo-webhook queue (api.pennyforge.org/webhook/ci/pending)
+                     — completed-run events (success AND failure) that failure-only
+                     polling misses. Run-level pass rows land in hist.
 
 Usage:
   python3 triage.py                          # all REPOS_DEFAULT, live (may comment)
@@ -22,7 +25,7 @@ import argparse, io, json, os, re, sys, time, urllib.parse, urllib.request, zipf
 
 HIST = "hist.jsonl"
 OUT = "out"
-REPOS_DEFAULT = "m0nk111-qwen-agent/ci-triage m0nk111-qwen-agent/nl-dmarc-census m0nk111-qwen-agent/pennyforge-site"
+REPOS_DEFAULT = "m0nk111-qwen-agent/ci-triage m0nk111-qwen-agent/nl-dmarc-census m0nk111-qwen-agent/askcom-corpus"
 LOG_CAP = 5 * 1024 * 1024  # 5MB raw-log cap (skeptic 6c: cost bomb guard)
 
 PROMPT = """You are ci-triage, a CI failure triage tool. Render a verdict for ONE failed GitHub Actions job, per this FROZEN contract (v0.1):
@@ -191,6 +194,46 @@ def record_recent_passes(repo, token, hist, seen_runs):
             for e in new_passes:
                 print(f"  history: {repo} / {e['job']} PASS run {rid}")
 
+def drain_webhook_queue(repos, hist, seen_runs):
+    """Webhook-queue drain (run 181): the studio repos' webhooks POST every COMPLETED run
+    (success AND failure) to the ci-triage receiver; the queue file is an audit log of
+    completions that the failure-only poller below can't see. New successful runs get a
+    run-level pass row (audit + seen_runs dedupe); failure events are left to the poller's
+    full path (job-level detail). No-op unless CI_WEBHOOK_SECRET is set.
+    NOTE: a run-level '(run)' pass row intentionally does NOT match hist_context's
+    per-job filter — job-level pass rows still come from record_recent_passes."""
+    secret = os.environ.get("CI_WEBHOOK_SECRET", "")
+    if not secret:
+        return
+    base = os.environ.get("CI_WEBHOOK_BASE", "https://api.pennyforge.org")
+    try:
+        d = api(base + "/webhook/ci/pending?auth=" + urllib.parse.quote(secret) + "&clear=1", "")
+    except Exception as e:
+        print(f"webhook queue: {e}")
+        return
+    events = d.get("pending", [])
+    if not events:
+        return
+    print(f"webhook queue: {len(events)} completed-run event(s)")
+    new_passes = []
+    for ev in events:
+        repo, rid, concl = ev.get("repo", ""), ev.get("run_id"), ev.get("conclusion")
+        if repo not in repos or not rid:
+            continue
+        if concl == "success" and not any(e.get("run_id") == rid and e.get("result") == "pass" for e in hist):
+            new_passes.append({"ts": ev.get("ts") or time.strftime("%Y-%m-%dT%H:%M:%S+00:00"), "repo": repo,
+                               "run_id": rid, "job": "(run)", "step": None, "result": "pass", "test": None,
+                               "classification": None, "evidence_line": None, "consecutive_failures": 0,
+                               "source": "webhook"})
+            seen_runs.add(rid)
+            print(f"  webhook: {repo} run {rid} PASS (run-level)")
+        elif concl:
+            print(f"  webhook: {repo} run {rid} {concl} (poller path handles detail)")
+    if new_passes:
+        _hist_write(new_passes)
+        hist.extend(new_passes)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry", action="store_true")
@@ -204,6 +247,7 @@ def main():
     model = os.environ.get("TRIAGE_MODEL", "google/gemini-3.5-flash-lite")
     hist = load_hist()
     seen_runs = {e["run_id"] for e in hist if e.get("run_id")}
+    drain_webhook_queue(set(a.repos), hist, seen_runs)
     os.makedirs(OUT, exist_ok=True)
     results = []
 
